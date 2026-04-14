@@ -8,11 +8,14 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Fetch lift data
+      - name: Fetch all sheets
         run: |
-          curl -s 'https://script.google.com/macros/s/AKfycbxLBbYd8Mj4stTEZkF87UZcovg6KAWzAr-fxG3YNVkLt8_LiSSCyckVQklH4waw1Kg8/exec' > lift-data.json
+          SHEET_ID="1qvjdiXpBBo8TF3qTc3YWtQ0w2amZoTVSoKPU4yftbgQ"
+          curl -s "https://docs.google.com/spreadsheets/d/$SHEET_ID/export?format=csv&gid=0" > Monday.csv
+          curl -s "https://docs.google.com/spreadsheets/d/$SHEET_ID/export?format=csv&gid=1417004612" > Tuesday.csv
+          curl -s "https://docs.google.com/spreadsheets/d/$SHEET_ID/export?format=csv&gid=594739764" > Wednesday.csv
+          curl -s "https://docs.google.com/spreadsheets/d/$SHEET_ID/export?format=csv&gid=1704932052" > Thursday.csv
+          cat Monday.csv Tuesday.csv Wednesday.csv Thursday.csv > lift-data.json
       
       - name: Update gist
         run: |
@@ -23,7 +26,7 @@ jobs:
             -d @- << EOF
           {
             "files": {
-              "lift-data.json": {
+              "lift-data.txt": {
                 "content": $(echo "$CONTENT" | jq -Rs '.')
               }
             }
