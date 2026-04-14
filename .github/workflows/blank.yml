@@ -1,0 +1,17 @@
+name: Update Lift Gist
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch and update gist
+        run: |
+          curl -s 'https://script.google.com/macros/s/AKfycbxugXlzZem0y_oKPgrnss6-QJOffyUM9K_j3_0_FK5JAoPPw3o7b6ZvDApZuJ4ArL_G/exec' > lift-data.json
+          
+          curl -X PATCH https://api.github.com/gists/98835984332d73574a557656e6cb38b3 \
+            -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
+            -d "{\"files\": {\"lift-data.json\": {\"content\": \"$(cat lift-data.json | sed 's/"/\\\\"/g')\"}}" || true
