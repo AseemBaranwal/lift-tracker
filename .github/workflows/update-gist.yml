@@ -12,6 +12,6 @@ jobs:
         run: |
           curl -s 'https://script.google.com/macros/s/AKfycbzq_BoRvRwzO0anf0wes7kmSdbcXgI5kDpmQ9e6dafD3--bSwQF6z3fs1NTGn-R1Laq/exec' > lift-data.json
           
-          curl -X PATCH https://api.github.com/gists/YOUR_GIST_ID \
+          curl -X PATCH https://api.github.com/gists/98835984332d73574a557656e6cb38b3 \
             -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
             -d "{\"files\": {\"lift-data.json\": {\"content\": \"$(cat lift-data.json | sed 's/"/\\\\"/g')\"}}" || true
